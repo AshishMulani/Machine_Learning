@@ -1,0 +1,39 @@
+Imports
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.compose import  ColumnTransformer
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
+from sklearn.metrics import recall_score, precision_score, classification_report, roc_auc_score
+
+from sklearn.neighbors import KNeighborsClassifier
+
+import os
+os.chdir("D:/Machine_Learning/Cases") #fetch the dataset from the folder
+
+LabelEncoder
+le = LabelEncoder()
+sonar['Class'] = le.fit_transform(sonar['Class'])
+X , y = sonar.drop('Class', axis=1), sonar['Class']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random_state=26, stratify= sonar['Class'])
+
+
+OneHotEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
+from sklearn.compose import  ColumnTransformer
+
+from sklearn.compose import make_column_selector
+
+ohe=OneHotEncoder(sparse_output=False,drop="first").set_output(transform="pandas")
+
+trans = ColumnTransformer(
+    transformers=[("OHE", ohe, make_column_selector(dtype_include=object))], remainder="passthrough",
+    verbose_feature_names_out=False).set_output(transform="pandas")
+
+X_trn_ohe = trans.fit_transform(X_train)
+X_tst_ohe = trans.transform(X_test)
