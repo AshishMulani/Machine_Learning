@@ -8,41 +8,33 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from sklearn.model\_selection import train\_test\_split
+from sklearn.model_selection import train_test_split
 
-from sklearn.linear\_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression
 
 from sklearn.preprocessing import LabelEncoder, StandarScaler, OneHotEncoder
 
 from sklearn.compose import  ColumnTransformer
 
-from sklearn.metrics import accuracy\_score, confusion\_matrix, f1\_score
+from sklearn.metrics import accuracy_score, confusion_matrix, f1_score
 
-from sklearn.metrics import recall\_score, precision\_score, classification\_report, roc\_auc\_score, log\_loss
-
+from sklearn.metrics import recall_score, precision_score, classification_report, roc_auc_score, log_loss
 
 
 from sklearn.neighbors import KNeighborsClassifier
 
-
-
 import os
-
-os.chdir("D:/Machine\_Learning/Cases") #fetch the dataset from the folder
+os.chdir("D:/Machine_Learning/Cases") #fetch the dataset from the folder
 
 
 
 # LabelEncoder
 
 le = LabelEncoder()
+sonar['Class'] = le.fit_transform(sonar['Class'])
 
-sonar\['Class'] = le.fit\_transform(sonar\['Class'])
-
-X , y = sonar.drop('Class', axis=1), sonar\['Class']
-
-
-
-X\_train, X\_test, y\_train, y\_test = train\_test\_split(X, y, test\_size= 0.3, random\_state=26, stratify= sonar\['Class'])
+X , y = sonar.drop('Class', axis=1), sonar['Class']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random_state=26, stratify= sonar['Class'])
 
 
 
@@ -50,29 +42,21 @@ X\_train, X\_test, y\_train, y\_test = train\_test\_split(X, y, test\_size= 0.3,
 
 # OneHotEncoder
 
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandarScaler
 from sklearn.compose import  ColumnTransformer
+from sklearn.compose import make_column_selector
+
+ohe=OneHotEncoder(sparse_output=False,drop="first").set_output(transform="pandas")
+
+trans = ColumnTransformer(transformers=[("OHE", ohe, make_column_selector(dtype_include=object))],     remainder="passthrough",verbose_feature_names_out=False).set_output(transform="pandas")
+
+X_trn_ohe = trans.fit_transform(X_train)
+X_tst_ohe = trans.transform(X_test)
 
 
+# Standard Scaler
 
-from sklearn.compose import make\_column\_selector
+scaler = StandardScaler()
 
-
-
-ohe=OneHotEncoder(sparse\_output=False,drop="first").set\_output(transform="pandas")
-
-
-
-trans = ColumnTransformer(
-
-&#x20;   transformers=\[("OHE", ohe, make\_column\_selector(dtype\_include=object))], remainder="passthrough",
-
-&#x20;   verbose\_feature\_names\_out=False).set\_output(transform="pandas")
-
-
-
-X\_trn\_ohe = trans.fit\_transform(X\_train)
-
-X\_tst\_ohe = trans.transform(X\_test)
-
+X_trn_scl = scaler.fit_transform(X_trn_ohe)
+X_tst_scl = scaler.transform(X_tst_ohe)
