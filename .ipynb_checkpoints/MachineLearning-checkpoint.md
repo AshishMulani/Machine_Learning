@@ -42,9 +42,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size= 0.3, random
 
 # OneHotEncoder
 
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandarScaler
-from sklearn.compose import  ColumnTransformer
-from sklearn.compose import make_column_selector
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
+from sklearn.compose import  ColumnTransformer, make_column_selector
 
 ohe=OneHotEncoder(sparse_output=False,drop="first").set_output(transform="pandas")
 
